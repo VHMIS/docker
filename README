@@ -1,0 +1,4 @@
+Dockerfile for development
+==========================
+
+vhmis: centos7, php7, apache2, mariadb10
