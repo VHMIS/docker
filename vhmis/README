@@ -17,7 +17,8 @@ VHMIS DOCKER
 
     docker run -d -P --name vhmis_server \
                -v VHMIS_FRAMEWORK:/vhmis/Framework \
-               -v VHMIS_APSS:/vhmis/VhmisSystem \
+               -v VHMIS_SYSTEM:/vhmis/VhmisSystem \
                -v VHMIS_ROOT:/vhmis/WebRoot \
+               -v VHMIS_LIBS:/vhmis/Libs \
                -v DATA:/data \
                vhmis
