@@ -1,0 +1,23 @@
+VHMIS DOCKER
+============
+
+# Inside
+
+* CentOS 7.
+* Default httpd, mariadb (ship with Centos7).
+* php7 from webstatic repo.
+* Lastest icu library from ICU project.
+* Custom php7-intl module.
+
+# Install
+
+    docker build -t vhmis .
+
+# Run as services
+
+    docker run -d -P --name vhmis_server \
+               -v VHMIS_FRAMEWORK:/vhmis/Framework \
+               -v VHMIS_APSS:/vhmis/VhmisSystem \
+               -v VHMIS_ROOT:/vhmis/WebRoot \
+               -v DATA:/data \
+               vhmis
