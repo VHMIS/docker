@@ -1,10 +1,17 @@
 #!/bin/bash
 set -e
 
-if [ ! -d "/data/mysql" ]; then
+usermod -u $HOST_USER_ID mysql
+groupmod -g $HOST_USER_ID mysql
+chmod -R 770 /var/lib/mysql
+chmod -R 770 /var/run/mariadb
+chown -R mysql:mysql /var/lib/mysql
+chown -R mysql:mysql /var/run/mariadb
+
+if [ ! -d "/var/lib/mysql/mysql" ]; then
 	echo 'Initializing database'
-	mysql_install_db  --user=root --datadir="/data" --rpm
+	mysql_install_db --user=mysql
 	echo 'Database initialized'
 fi
 
-/etc/init.d/mysql start --user=root --datadir="/data"
+mysqld_safe --user=mysql

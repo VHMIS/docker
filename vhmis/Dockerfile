@@ -36,12 +36,16 @@ RUN chmod +x /usr/local/bin/httpd_start \
 
 # Volumes
 RUN mkdir /vhmis && mkdir /vhmis/Framework && mkdir /vhmis/VhmisSystem \
-    && mkdir /vhmis/Libs && mkdir /vhmis/WebRoot \
-    && mkdir /data
-VOLUME /vhmis/Framework /vhmis/VhmisSystem /vhmis/Libs /vhmis/WebRoot /data
+    && mkdir /vhmis/Libs && mkdir /vhmis/WebRoot && /vhmis/Data
+VOLUME /vhmis/Framework /vhmis/VhmisSystem /vhmis/Libs /vhmis/WebRoot /vhmis/Data /var/lib/mysql
 
 # Ports
 EXPOSE 80 3306
+
+# Env
+ENV TERM dumb
+ENV HOST_USER_ID 1000
+ENV HOST_USER_GID 1000
 
 # Default command to start all services
 CMD ["/usr/bin/supervisord"]
