@@ -1,17 +1,26 @@
 #!/bin/bash
 set -e
 
-usermod -u $HOST_USER_ID mysql
-groupmod -g $HOST_USER_ID mysql
-chmod -R 770 /var/lib/mysql
-chmod -R 770 /var/run/mariadb
-chown -R mysql:mysql /var/lib/mysql
-chown -R mysql:mysql /var/run/mariadb
+# docker machine share folder
+#   uid = 1000 (docker)
+#   gid = 50 (staff) -> (ftp) centos container
+# linux host
+#   uid = get by id -u (user of share folder)
+#   gid = get by id -g (group of share folder)
+usermod -u $HOST_USER_ID batman
+groupmod -g $(($HOST_USER_GID + 10000)) $(getent group $HOST_USER_GID | cut -d: -f1) > /dev/null 2>&1
+groupmod -g $HOST_USER_GID dccomic
+
+#chmod -R 770 /var/lib/mysql
+#chmod -R 770 /var/run/mariadb
+chown -R batman:dccomic /var/lib/mysql
+chown -R batman:dccomic /var/run/mariadb
+chown -R batman:dccomic /var/log/mariadb
 
 if [ ! -d "/var/lib/mysql/mysql" ]; then
 	echo 'Initializing database'
-	mysql_install_db --user=mysql
+	mysql_install_db --user=batman
 	echo 'Database initialized'
 fi
 
-mysqld_safe --user=mysql
+mysqld_safe --user=batman
