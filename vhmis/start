@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+
+# docker machine share folder
+#   uid = 1000 (docker)
+#   gid = 50 (staff) -> (ftp) centos container
+# linux host
+#   uid = get by id -u (user of share folder)
+#   gid = get by id -g (group of share folder)
+usermod -u $HOST_USER_ID batman
+groupmod -g $(($HOST_USER_GID + 10000)) $(getent group $HOST_USER_GID | cut -d: -f1) > /dev/null 2>&1
+groupmod -g $HOST_USER_GID dccomic
+
+/usr/bin/supervisord

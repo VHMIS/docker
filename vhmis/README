@@ -1,7 +1,6 @@
-VHMIS DOCKER
-============
+# VHMIS DOCKER
 
-# Inside
+## Inside
 
 * CentOS 7.
 * Default httpd, mariadb (ship with Centos7).
@@ -9,15 +8,41 @@ VHMIS DOCKER
 * Lastest icu library from ICU project.
 * Custom php7-intl module.
 
-# Install
+## Install
 
     docker build -t vhmis .
 
-# Run as services
+## Run
 
     docker run -d -P --name vhmis_server \
                -v /vhmis/Framework:/vhmis/Framework \
                -v /vhmis/VhmisSystem:/vhmis/VhmisSystem \
                -v /vhmis/WebRoot:/vhmis/WebRoot \
-               -v /data:/data \
+               -v /vhmis/Data:/vhmis/Data \
+               -v /vhmis/Libs:/vhmis/Libs \
+               -v /vhmis/MysqlData:/var/lib/mysql \
                vhmis
+
+For linux host, use your correct HOST_USER_ID and HOST_USER_GID to allow container has write permission.
+
+    # get folder's user and group id on host
+    id -u username
+    id -g groupname
+
+    # run container with ids
+    docker run -d -P --name vhmis_server \
+               -v /vhmis/Framework:/vhmis/Framework \
+               -v /vhmis/VhmisSystem:/vhmis/VhmisSystem \
+               -v /vhmis/WebRoot:/vhmis/WebRoot \
+               -v /vhmis/Data:/vhmis/Data \
+               -v /vhmis/Libs:/vhmis/Libs \
+               -v /vhmis/MysqlData:/var/lib/mysql \
+               -e HOST_USER_ID='uid' \
+               -e HOST_USER_GID='gid' \
+               vhmis
+
+## Set mysql root password
+
+In the first time running, execute follow command to set mysql root password
+
+    docker exec [container_name] mysqladmin -u root -S /var/run/mariadb/mysql.sock password 'newpassword'

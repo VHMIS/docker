@@ -4,4 +4,8 @@ set -e
 # Apache gets grumpy about PID files pre-existing
 rm -f /usr/local/apache2/logs/httpd.pid
 
+# Set user and group
+chown -R batman:dccomic /vhmis
+chown -R batman:dccomic /var/lib/php # sessions ...
+
 exec httpd -DFOREGROUND

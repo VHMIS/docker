@@ -23,7 +23,7 @@ RUN cd ~ \
     && rm -rf usr \
     && rm -rf icu4c-56_1-RHEL6-x64.tgz
 
-# install intl modules for php7
+# install intl module for php7
 COPY intl.so /usr/lib64/php/modules/
 COPY intl.ini /etc/php.d/
 
@@ -31,7 +31,7 @@ COPY intl.ini /etc/php.d/
 COPY host.conf /etc/httpd/conf.d/
 COPY supervisord.conf /etc/
 
-# change config
+# change configs
 RUN sed -i -e '/socket=/ s/=.*/=\/var\/run\/mariadb\/mysql.sock/' /etc/my.cnf \
     && sed -i 's/User apache/User batman/' /etc/httpd/conf/httpd.conf \
     && sed -i 's/Group apache/Group dccomic/' /etc/httpd/conf/httpd.conf
@@ -39,8 +39,10 @@ RUN sed -i -e '/socket=/ s/=.*/=\/var\/run\/mariadb\/mysql.sock/' /etc/my.cnf \
 # copy bash scripts to start services
 COPY httpd_start /usr/local/bin/
 COPY mariadb_start /usr/local/bin/
+COPY start /usr/local/bin/
 RUN chmod +x /usr/local/bin/httpd_start \
-    && chmod +x /usr/local/bin/mariadb_start
+    && chmod +x /usr/local/bin/mariadb_start \
+    && chmod +x /usr/local/bin/start
 
 # Volumes
 RUN mkdir /vhmis && mkdir /vhmis/Framework && mkdir /vhmis/VhmisSystem \
@@ -56,4 +58,4 @@ ENV HOST_USER_ID 1000
 ENV HOST_USER_GID 50
 
 # Default command to start all services
-CMD ["/usr/bin/supervisord"]
+CMD ["/usr/local/bin/start"]
